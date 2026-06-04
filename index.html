@@ -27,7 +27,7 @@
                     },
                     colors: {
                         blueprint: {
-                            bg: '#0B1120',
+                            bg: '#000000', /* 메인 배경을 블랙으로 변경 */
                             panel: '#111827',
                             border: '#1E293B',
                             accent: '#38BDF8',
@@ -40,21 +40,21 @@
     </script>
 
     <style>
-        /* Blueprint Grid Background */
+        /* Blueprint Grid Background - 블랙 테마에 맞게 조정 */
         .bg-grid-pattern {
             background-size: 40px 40px;
             background-image: 
-                linear-gradient(to right, rgba(30, 41, 59, 0.5) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+                linear-gradient(to right, rgba(30, 41, 59, 0.4) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 41, 59, 0.4) 1px, transparent 1px);
         }
         
-        /* Custom Scrollbar */
+        /* Custom Scrollbar - 블랙 테마에 맞게 조정 */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #0B1120;
+            background: #000000;
         }
         ::-webkit-scrollbar-thumb {
             background: #1E293B;
@@ -65,7 +65,8 @@
         }
 
         .tech-panel {
-            background-color: rgba(17, 24, 39, 0.85);
+            /* 패널 배경을 조금 더 불투명하게 하여 블랙 배경과 대비 */
+            background-color: rgba(17, 24, 39, 0.95);
             backdrop-filter: blur(8px);
         }
     </style>
@@ -147,7 +148,8 @@
                 <img src="https://media.istockphoto.com/id/2265201245/ko/%EC%82%AC%EC%A7%84/%EB%94%94%EC%A7%80%ED%84%B8-%ED%8A%B8%EC%9C%88-%EC%83%9D%EC%84%B1%EC%9D%84-%EC%9C%84%ED%95%9C-bim-%EB%B0%8F-gis-%EB%8F%84%EA%B5%AC%EB%A5%BC-%EC%A1%B0%EC%9E%91%ED%95%98%EB%8A%94-%EC%97%AC%EC%84%B1-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4.jpg?s=612x612&w=0&k=20&c=H8lCrvCRWk8lPB9fK4zCgbxEgdOUpljpuZj5kb52fR4=" 
                      alt="BIM Engineer" 
                      class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-screen" />
-                <div class="absolute inset-0 bg-gradient-to-r from-[#0B1120] via-[#0B1120]/80 to-transparent"></div>
+                <!-- 블랙 테마에 맞게 그라데이션 수정 -->
+                <div class="absolute inset-0 bg-gradient-to-r from-black via-black/80 to-transparent"></div>
                 <div class="relative z-10 p-6 md:p-8">
                     <h2 class="text-xl md:text-2xl font-bold text-white mb-2 tracking-wide">MEP & BIM Market Intelligence</h2>
                     <p class="text-gray-400 text-xs md:text-sm max-w-xl leading-relaxed">
@@ -320,32 +322,25 @@
             
             menuLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    e.preventDefault(); // 기본 링크 이동 방지 (SPA 동작 시뮬레이션)
+                    e.preventDefault(); // 기본 링크 이동 방지
                     
                     // 1. 모든 메뉴의 활성화 상태 초기화
                     menuLinks.forEach(item => {
-                        // 활성화 클래스 제거
                         item.classList.remove('bg-blue-500/10', 'text-blueprint-accent', 'border-l-2', 'border-blueprint-accent');
                         item.classList.add('text-gray-400', 'hover:text-gray-200', 'hover:bg-slate-800/50');
                         
-                        // 자식 아이콘 색상 초기화
                         const icon = item.querySelector('i');
-                        if(icon) {
-                            icon.classList.remove('text-blue-400');
-                        }
+                        if(icon) icon.classList.remove('text-blue-400');
                     });
 
                     // 2. 클릭된 메뉴만 활성화 상태로 변경
                     this.classList.remove('text-gray-400', 'hover:text-gray-200', 'hover:bg-slate-800/50');
                     this.classList.add('bg-blue-500/10', 'text-blueprint-accent', 'border-l-2', 'border-blueprint-accent');
                     
-                    // 자식 아이콘 색상 변경
                     const activeIcon = this.querySelector('i');
-                    if(activeIcon) {
-                        activeIcon.classList.add('text-blue-400');
-                    }
+                    if(activeIcon) activeIcon.classList.add('text-blue-400');
                     
-                    // 데모용 Toast 알림 (선택 사항)
+                    // 데모용 Toast 알림
                     const menuName = this.querySelector('span').innerText;
                     showToast(`${menuName} 메뉴로 이동합니다.`);
                 });
@@ -364,7 +359,7 @@
                         borderColor: '#38BDF8',
                         backgroundColor: 'rgba(56, 189, 248, 0.1)',
                         borderWidth: 2,
-                        pointBackgroundColor: '#0B1120',
+                        pointBackgroundColor: '#000000', // 포인터 배경도 블랙으로 수정
                         pointBorderColor: '#38BDF8',
                         pointBorderWidth: 2,
                         fill: true,
