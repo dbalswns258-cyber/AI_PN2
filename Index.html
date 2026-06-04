@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEP & BIM Market Intelligence Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        data: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        blueprint: {
+                            bg: '#0B1120',
+                            panel: '#111827',
+                            border: '#1E293B',
+                            accent: '#38BDF8',
+                            line: '#0EA5E9'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Blueprint Grid Background */
+        .bg-grid-pattern {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(30, 41, 59, 0.5) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(30, 41, 59, 0.5) 1px, transparent 1px);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B1120;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1E293B;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        .tech-panel {
+            background-color: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="bg-blueprint-bg text-gray-300 font-sans h-screen overflow-hidden flex">
+
+    <!-- Sidebar (LNB) -->
+    <aside class="w-64 tech-panel border-r border-blueprint-border hidden md:flex flex-col z-20 flex-shrink-0">
+        <!-- Logo Area -->
+        <div class="h-16 flex items-center px-6 border-b border-blueprint-border">
+            <i class="ph ph-buildings text-blueprint-accent text-2xl mr-2"></i>
+            <span class="text-white font-bold tracking-wider text-sm">MB-MID</span>
+        </div>
+        
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-6 px-3 space-y-6">
+            <!-- 대시보드 메뉴 그룹 -->
+            <div>
+                <p class="px-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">대시보드</p>
+                <div class="space-y-1">
+                    <a href="#" class="flex items-center px-3 py-2 bg-blue-500/10 text-blueprint-accent border-l-2 border-blueprint-accent rounded-r-md transition-colors group">
+                        <i class="ph ph-squares-four mr-3 text-lg group-hover:text-blue-400"></i>
+                        <span class="text-xs font-medium">대시보드 홈</span>
+                    </a>
+                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:text-gray-200 hover:bg-slate-800/50 rounded-md transition-colors group">
+                        <i class="ph ph-file-text mr-3 text-lg group-hover:text-white"></i>
+                        <span class="text-xs font-medium">리포트</span>
+                    </a>
+                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:text-gray-200 hover:bg-slate-800/50 rounded-md transition-colors group">
+                        <i class="ph ph-database mr-3 text-lg group-hover:text-white"></i>
+                        <span class="text-xs font-medium">데이터</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Settings Group -->
+            <div>
+                <p class="px-3 text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Settings</p>
+                <div class="space-y-1">
+                    <a href="#" class="flex items-center px-3 py-2 text-gray-400 hover:text-gray-200 hover:bg-slate-800/50 rounded-md transition-colors group">
+                        <i class="ph ph-user-circle mr-3 text-lg group-hover:text-white"></i>
+                        <span class="text-xs font-medium">My Account</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 flex flex-col overflow-hidden relative">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 bg-grid-pattern opacity-50 pointer-events-none"></div>
+
+        <!-- Header -->
+        <header class="h-16 tech-panel border-b border-blueprint-border flex items-center justify-between px-6 flex-shrink-0 relative z-10">
+            <div class="flex items-center">
+                <button class="md:hidden mr-4 text-gray-400 hover:text-white">
+                    <i class="ph ph-list text-2xl"></i>
+                </button>
+                <h1 class="text-lg font-semibold text-gray-100">Market Intelligence Overview</h1>
+                <span class="ml-4 px-2 py-0.5 rounded text-[10px] border border-emerald-500/30 text-emerald-400 bg-emerald-500/10 font-data hidden sm:inline-block">LIVE SYNC</span>
+            </div>
+            <div class="flex items-center space-x-3">
+                <div class="relative hidden sm:block">
+                    <i class="ph ph-magnifying-glass absolute left-2.5 top-2 text-gray-500"></i>
+                    <input type="text" placeholder="Search keywords, reports..." class="bg-slate-900 border border-blueprint-border text-gray-300 rounded-md pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-blueprint-accent w-64 transition-all">
+                </div>
+                <button onclick="showToast('Preparing Raw Data Export (Excel)...')" class="flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded shadow-lg shadow-blue-900/50 transition-colors text-xs font-medium">
+                    <i class="ph ph-microsoft-excel-logo mr-1.5 text-base"></i> <span class="hidden sm:inline">Export Raw Data</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 relative z-10">
+            
+            <!-- Welcome Banner Area -->
+            <div class="tech-panel rounded-lg overflow-hidden relative h-32 md:h-48 flex items-center border border-blueprint-border">
+                <img src="https://media.istockphoto.com/id/2265201245/ko/%EC%82%AC%EC%A7%84/%EB%94%94%EC%A7%80%ED%84%B8-%ED%8A%B8%EC%9C%88-%EC%83%9D%EC%84%B1%EC%9D%84-%EC%9C%84%ED%95%9C-bim-%EB%B0%8F-gis-%EB%8F%84%EA%B5%AC%EB%A5%BC-%EC%A1%B0%EC%9E%91%ED%95%98%EB%8A%94-%EC%97%AC%EC%84%B1-%EC%97%94%EC%A7%80%EB%8B%88%EC%96%B4.jpg?s=612x612&w=0&k=20&c=H8lCrvCRWk8lPB9fK4zCgbxEgdOUpljpuZj5kb52fR4=" 
+                     alt="BIM Engineer" 
+                     class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-screen" />
+                <div class="absolute inset-0 bg-gradient-to-r from-[#0B1120] via-[#0B1120]/80 to-transparent"></div>
+                <div class="relative z-10 p-6 md:p-8">
+                    <h2 class="text-xl md:text-2xl font-bold text-white mb-2 tracking-wide">MEP & BIM Market Intelligence</h2>
+                    <p class="text-gray-400 text-xs md:text-sm max-w-xl leading-relaxed">
+                        디지털 트윈(Digital Twin) 생성을 위한 BIM 데이터를 분석하고<br class="hidden md:block" />기계설비 적산 및 설계 자동화 인사이트를 도출하세요.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Top Area: Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- KPI 1 -->
+                <div class="tech-panel border border-blueprint-border rounded-lg p-5 flex flex-col relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="ph ph-trend-up text-6xl text-blueprint-accent"></i>
+                    </div>
+                    <span class="text-xs text-gray-400 font-medium mb-1 z-10">글로벌 평균 CAGR (예측)</span>
+                    <div class="flex items-baseline space-x-2 z-10">
+                        <span class="text-3xl font-bold text-white font-data">13.1<span class="text-xl text-gray-500">%</span></span>
+                        <span class="text-xs text-emerald-400 flex items-center"><i class="ph ph-arrow-up-right mr-1"></i>High Growth</span>
+                    </div>
+                </div>
+                <!-- KPI 2 -->
+                <div class="tech-panel border border-blueprint-border rounded-lg p-5 flex flex-col relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="ph ph-file-pdf text-6xl text-blueprint-accent"></i>
+                    </div>
+                    <span class="text-xs text-gray-400 font-medium mb-1 z-10">수집된 시장 조사 리포트</span>
+                    <div class="flex items-baseline space-x-2 z-10">
+                        <span class="text-3xl font-bold text-white font-data">42<span class="text-xl text-gray-500">건</span></span>
+                    </div>
+                </div>
+                <!-- KPI 3 -->
+                <div class="tech-panel border border-blueprint-border rounded-lg p-5 flex flex-col relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i class="ph ph-buildings text-6xl text-blueprint-accent"></i>
+                    </div>
+                    <span class="text-xs text-gray-400 font-medium mb-1 z-10">분석된 조사 기관 데이터</span>
+                    <div class="flex items-baseline space-x-2 z-10">
+                        <span class="text-3xl font-bold text-white font-data">9<span class="text-xl text-gray-500">개사</span></span>
+                        <span class="text-xs text-gray-500">Grand View, MarketsandMarkets 등</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Middle Area: Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Line Chart -->
+                <div class="tech-panel border border-blueprint-border rounded-lg p-5 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-semibold text-gray-200">글로벌 BIM 시장 규모 추이</h3>
+                        <button class="text-gray-500 hover:text-white" onclick="showToast('Exporting Chart...')"><i class="ph ph-download-simple"></i></button>
+                    </div>
+                    <div class="relative h-64 w-full">
+                        <canvas id="marketSizeChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Bar Chart -->
+                <div class="tech-panel border border-blueprint-border rounded-lg p-5 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-semibold text-gray-200">조사 기관별 CAGR 비교</h3>
+                        <button class="text-gray-500 hover:text-white" onclick="showToast('Exporting Chart...')"><i class="ph ph-download-simple"></i></button>
+                    </div>
+                    <div class="relative h-64 w-full">
+                        <canvas id="cagrBarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Area -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Donut Chart -->
+                <div class="tech-panel border border-blueprint-border rounded-lg p-5 flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-sm font-semibold text-gray-200">국가별 3D BIM 점유율 (미국/독일/일본)</h3>
+                    </div>
+                    <div class="relative h-48 w-full flex justify-center">
+                        <canvas id="shareDonutChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Reports & Keywords -->
+                <div class="tech-panel border border-blueprint-border rounded-lg p-5 lg:col-span-2 flex flex-col">
+                    <h3 class="text-sm font-semibold text-gray-200 mb-4">최근 업데이트 리포트 & 핵심 동인</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 flex-1">
+                        <!-- Report List -->
+                        <div class="space-y-3">
+                            <div class="flex items-start p-3 bg-slate-800/30 rounded border border-slate-700/50 hover:bg-slate-800/70 transition-colors cursor-pointer">
+                                <div class="bg-red-500/20 text-red-400 p-2 rounded mr-3">
+                                    <i class="ph ph-file-pdf text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-xs font-semibold text-gray-200 line-clamp-1">국내외 기계설비 3D 모델링·BIM 시장 조사</h4>
+                                    <p class="text-[10px] text-gray-500 mt-0.5">기계설비 적산·설계 자동화 기반 마련</p>
+                                </div>
+                                <button class="text-blueprint-accent hover:text-blue-300 ml-2"><i class="ph ph-bookmark-simple"></i></button>
+                            </div>
+                            <div class="flex items-start p-3 bg-slate-800/30 rounded border border-slate-700/50 hover:bg-slate-800/70 transition-colors cursor-pointer">
+                                <div class="bg-red-500/20 text-red-400 p-2 rounded mr-3">
+                                    <i class="ph ph-file-pdf text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-xs font-semibold text-gray-200 line-clamp-1">기계설비 3d Bim 시장조사 보고서 초안</h4>
+                                    <p class="text-[10px] text-gray-500 mt-0.5">시장구조, 제도환경 및 실무 적용성 분석</p>
+                                </div>
+                                <button class="text-blueprint-accent hover:text-blue-300 ml-2"><i class="ph ph-bookmark-simple"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Keywords (Tags) -->
+                        <div class="flex flex-col">
+                            <h4 class="text-xs font-medium text-gray-400 mb-2">핵심 성장 동인 키워드</h4>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-2.5 py-1 bg-blue-900/40 text-blue-300 text-[10px] rounded border border-blue-800/50">데이터센터 건립</span>
+                                <span class="px-2.5 py-1 bg-blue-900/40 text-blue-300 text-[10px] rounded border border-blue-800/50">공공 BIM 의무화</span>
+                                <span class="px-2.5 py-1 bg-blue-900/40 text-blue-300 text-[10px] rounded border border-blue-800/50">클라우드 협업</span>
+                                <span class="px-2.5 py-1 bg-slate-800 text-gray-300 text-[10px] rounded border border-slate-700">적산 자동화 (QTO)</span>
+                                <span class="px-2.5 py-1 bg-slate-800 text-gray-300 text-[10px] rounded border border-slate-700">디지털 트윈</span>
+                                <span class="px-2.5 py-1 bg-slate-800 text-gray-300 text-[10px] rounded border border-slate-700">간섭 검토(Clash)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="pt-4 border-t border-blueprint-border text-center text-[10px] text-gray-600">
+                &copy; 2026 MEP & BIM Market Intelligence Dashboard. All rights reserved.
+            </footer>
+        </main>
+    </div>
+
+    <!-- Toast Notification System -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Custom Toast Notification (Replaces window.alert)
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-slate-800 border border-blueprint-border text-gray-200 px-4 py-3 rounded shadow-xl flex items-center transform transition-all duration-300 translate-y-10 opacity-0';
+            toast.innerHTML = `
+                <i class="ph ph-info mr-2 text-blueprint-accent text-lg"></i>
+                <span class="text-xs font-medium">${message}</span>
+            `;
+            container.appendChild(toast);
+            
+            // Animate in
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-10', 'opacity-0');
+            });
+
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Chart.js Default Config for Dark Theme
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.scale.grid.color = 'rgba(30, 41, 59, 0.5)';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- 사이드바 메뉴 클릭 활성화 로직 시작 ---
+            const menuLinks = document.querySelectorAll('aside nav a');
+            
+            menuLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault(); // 기본 링크 이동 방지 (SPA 동작 시뮬레이션)
+                    
+                    // 1. 모든 메뉴의 활성화 상태 초기화
+                    menuLinks.forEach(item => {
+                        // 활성화 클래스 제거
+                        item.classList.remove('bg-blue-500/10', 'text-blueprint-accent', 'border-l-2', 'border-blueprint-accent');
+                        item.classList.add('text-gray-400', 'hover:text-gray-200', 'hover:bg-slate-800/50');
+                        
+                        // 자식 아이콘 색상 초기화
+                        const icon = item.querySelector('i');
+                        if(icon) {
+                            icon.classList.remove('text-blue-400');
+                        }
+                    });
+
+                    // 2. 클릭된 메뉴만 활성화 상태로 변경
+                    this.classList.remove('text-gray-400', 'hover:text-gray-200', 'hover:bg-slate-800/50');
+                    this.classList.add('bg-blue-500/10', 'text-blueprint-accent', 'border-l-2', 'border-blueprint-accent');
+                    
+                    // 자식 아이콘 색상 변경
+                    const activeIcon = this.querySelector('i');
+                    if(activeIcon) {
+                        activeIcon.classList.add('text-blue-400');
+                    }
+                    
+                    // 데모용 Toast 알림 (선택 사항)
+                    const menuName = this.querySelector('span').innerText;
+                    showToast(`${menuName} 메뉴로 이동합니다.`);
+                });
+            });
+            // --- 사이드바 메뉴 클릭 활성화 로직 끝 ---
+
+            // 1. Line Chart (Market Size)
+            const ctxLine = document.getElementById('marketSizeChart').getContext('2d');
+            new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: ['2024', '2025', '2026', '2028', '2030', '2033', '2035'],
+                    datasets: [{
+                        label: '시장 규모 (억 달러)',
+                        data: [85.3, 90.3, 112.9, 130.5, 154.2, 237.4, 284.6],
+                        borderColor: '#38BDF8',
+                        backgroundColor: 'rgba(56, 189, 248, 0.1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#0B1120',
+                        pointBorderColor: '#38BDF8',
+                        pointBorderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: false }
+                    }
+                }
+            });
+
+            // 2. Bar Chart (CAGR)
+            const ctxBar = document.getElementById('cagrBarChart').getContext('2d');
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['Mordor', 'Spherical', 'Coherent', 'GII Korea', 'Technavio', 'R. Nester', 'Grand View', 'M&M'],
+                    datasets: [{
+                        label: 'CAGR (%)',
+                        data: [15.9, 14.7, 14.6, 13.9, 12.7, 12.2, 11.8, 11.3],
+                        backgroundColor: 'rgba(14, 165, 233, 0.6)',
+                        borderColor: '#0EA5E9',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // 3. Donut Chart (Market Share)
+            const ctxDonut = document.getElementById('shareDonutChart').getContext('2d');
+            new Chart(ctxDonut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['미국', '독일', '일본', '기타'],
+                    datasets: [{
+                        data: [31, 27, 20, 22],
+                        backgroundColor: ['#0284c7', '#0369a1', '#075985', '#0f172a'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
