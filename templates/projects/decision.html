@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block content %}
+<a class="breadcrumb" href="{% url 'drawing' drawing.pk %}">{{ drawing.original_name }} / 검토함</a><div class="page-heading"><span class="eyebrow">HUMAN REVIEW</span><h1>객체 {{ entity.handle }} 확인</h1><p>{{ entity.type }} · {{ entity.layer }} · 모델 길이 {{ entity.length_model|default:'미지원' }}</p></div>
+<div class="two-col"><section class="panel"><h2>원본 근거</h2><p>아래 객체 번호와 좌표를 원본 CAD에서 대조하세요. 여기의 도면층 이름만으로 설비 의미를 확정하지 않습니다.</p>
+<dl><dt>파일 버전</dt><dd>{{ drawing.id }}</dd><dt>객체 handle</dt><dd><code>{{ entity.handle }}</code></dd><dt>색상 / 선종류</dt><dd>{{ entity.color }} / {{ entity.linetype }}</dd><dt>문자</dt><dd>{{ entity.text|default:'없음' }}</dd><dt>블록 정보</dt><dd><pre>{{ entity.block|default:'없음' }}</pre></dd></dl>
+<details open><summary>좌표 및 곡선 구간 (모델 단위)</summary><pre>{{ entity.points }}</pre>{% for segment in entity.segments %}<p><code>{{ segment.start }} → {{ segment.end }}</code><small>bulge {{ segment.bulge }} · 길이 {{ segment.length_model }}</small></p>{% endfor %}</details>
+{% for warning in entity.warnings %}<p class="warning">{{ warning }}</p>{% endfor %}<a href="{% url 'original' drawing.pk %}">원본 다운로드</a></section>
+<section class="panel"><h2>의미와 규격 지정</h2><p class="muted">객체 내부에서 관경이 바뀌면 CAD에서 먼저 분할하고 새 버전을 등록하세요. 미지원 객체는 확정할 수 없습니다.</p><form method="post">{% csrf_token %}{{ form.as_p }}<button>확인 정보 저장</button></form></section></div>
+<section class="panel"><h2>변경 이력</h2>{% for event in events %}<details><summary>수정 {{ event.revision }} · {{ event.actor.username }} · {{ event.created_at|date:'Y.m.d H:i:s' }}</summary><h3>이전</h3><pre>{{ event.before }}</pre><h3>변경</h3><pre>{{ event.after }}</pre></details>{% empty %}<p>아직 변경 이력이 없습니다.</p>{% endfor %}</section>
+{% endblock %}

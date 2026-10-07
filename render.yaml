@@ -1,0 +1,31 @@
+# Paid persistent disk is required. Review the current Render quote before creation.
+# Do not change this to a free/ephemeral service or scale above one instance.
+services:
+  - type: web
+    name: ai-pn2
+    runtime: python
+    plan: starter
+    region: singapore
+    branch: main
+    buildCommand: pip install --requirement requirements.txt
+    startCommand: python scripts/serve.py
+    healthCheckPath: /healthz/
+    numInstances: 1
+    autoDeployTrigger: "off"
+    disk:
+      name: ai-pn2-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.14
+      - key: AI_PN2_ENV
+        value: production
+      - key: AI_PN2_DATA_DIR
+        value: /var/data/ai-pn2
+      - key: AI_PN2_HTTPS
+        value: "1"
+      - key: AI_PN2_TRUST_PROXY
+        value: "1"
+      - key: AI_PN2_DEBUG
+        value: "0"

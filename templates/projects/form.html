@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block content %}<div class="page-heading"><h1>{{ heading }}</h1></div><section class="panel narrow"><form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<button>저장 / 실행</button></form></section>{% endblock %}

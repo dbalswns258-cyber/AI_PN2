@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% block title %}로그인{% endblock %}{% block content %}
+<div class="page-heading"><span class="eyebrow">SECURE WORKSPACE</span><h1>작업실에 로그인</h1><p>프로젝트와 도면은 해당 계정의 소유자만 열람할 수 있습니다.</p></div>
+<section class="panel narrow"><form method="post">{% csrf_token %}{{ form.as_p }}<input type="hidden" name="next" value="{{ next }}"><button>로그인</button></form></section>
+<p class="muted">계정은 관리자가 터미널에서 생성합니다. 공개 회원가입은 아직 제공하지 않습니다.</p>
+{% endblock %}

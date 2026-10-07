@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% block content %}
+<a class="breadcrumb" href="{% url 'home' %}">프로젝트 /</a><div class="page-heading split"><div><span class="eyebrow">{{ project.trade }}</span><h1>{{ project.name }}</h1><p>{{ project.client|default:'발주처 미입력' }} · {{ project.get_status_display }}</p></div><a class="button secondary" href="{% url 'project_edit' project.pk %}">프로젝트 수정</a></div>
+{% if project.is_sample %}<div class="notice"><span class="badge">테스트 프로젝트</span> 연습·검증용으로 분류된 프로젝트입니다. 이 프로젝트의 자료와 산출 수량은 실제 업무 자료와 구분하여 사용하세요.</div>{% else %}<p><span class="badge">업무 프로젝트</span></p>{% endif %}
+<div class="notice">작업자: {% if worker_ready %}<strong>연결됨</strong>{% else %}<strong>연결 확인 필요</strong> — 등록은 가능하며 작업자가 실행되면 대기 작업을 처리합니다.{% endif %}</div>
+<div class="two-col"><section class="panel"><h2>도면과 참고 자료</h2><p class="muted">업로드마다 별도 버전으로 보관합니다. DWG는 AutoCAD에서 DXF로 저장한 후 등록하세요.</p>
+{% for drawing in drawings %}<a class="file-row" href="{% url 'drawing' drawing.pk %}"><span class="file-kind">{{ drawing.kind|upper }}</span><span><strong>{{ drawing.original_name }}</strong><small>{{ drawing.created_at|date:'Y.m.d H:i' }} · {{ drawing.id|stringformat:'s'|slice:':8' }}{% if drawing.previous %} · 이전 버전 연결{% endif %}</small></span><span>↗</span></a>{% empty %}<p class="empty">등록된 자료가 없습니다.</p>{% endfor %}</section>
+<section class="panel"><h2>원본 등록</h2><form method="post" enctype="multipart/form-data">{% csrf_token %}{{ form.as_p }}<button>보관하고 객체 추출 요청</button></form></section></div>
+{% endblock %}

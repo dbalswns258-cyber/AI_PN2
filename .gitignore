@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.data/
+*.sqlite3*
+media/
+uploads/
+outputs/
+.pytest_cache/
+*.log
+backups/
+staticfiles/
+.env.*
+!.env.example

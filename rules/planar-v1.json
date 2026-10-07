@@ -1,0 +1,13 @@
+{
+  "version": "planar-direct-v1",
+  "description": "확정된 단일 관경 객체의 모델 공간 XY 중심선 길이. 업무 적산 승인 기준이 아님.",
+  "quantity_origin": "drawing_direct",
+  "length_basis": "model_xy_centerline",
+  "round_at": "diameter_total",
+  "decimal_places": 3,
+  "rounding": "ROUND_HALF_UP",
+  "fitting_adjustment": "not_applied",
+  "waste": "not_applied",
+  "insulation": "not_calculated",
+  "riser_and_fixture_allowances": "not_calculated"
+}

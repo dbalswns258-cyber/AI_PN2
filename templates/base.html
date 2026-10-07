@@ -1,0 +1,9 @@
+{% load static %}<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}설비 산출 작업실{% endblock %} · AI PN2</title>
+<link rel="stylesheet" href="{% static 'app.css' %}"><link rel="icon" href="{% static 'favicon.svg' %}" type="image/svg+xml"></head>
+<body><header class="topbar"><a class="brand" href="{% url 'home' %}"><span class="brand-mark">P2</span> 설비 산출 작업실</a>
+<div class="account">{% if user.is_authenticated %}<span>{{ user.username }}</span><form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="quiet">로그아웃</button></form>{% else %}<span>개인용 검증 버전</span>{% endif %}</div></header>
+<div class="layout"><aside class="sidebar"><span class="eyebrow">WORKSPACE / 01</span><h2>근거를 남기는<br>설비 산출</h2><a href="{% url 'home' %}">프로젝트</a><div class="scope"><strong>첫 검증 범위</strong><p>급수 · 한 층 / 한 구간<br>DXF → 사용자 확인 → 평면 길이</p><span class="badge">실제 도면 검증 전</span></div><p class="side-note">MQC · BIM · AI 자동 판독<br>후속 개발 단계</p></aside>
+<main>{% for message in messages %}<div class="notice">{{ message }}</div>{% endfor %}{% block content %}{% endblock %}
+<footer>원본 보존 · 확인 근거 기록 · 미확정 물량 구분</footer></main></div></body></html>
